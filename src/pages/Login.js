@@ -1,5 +1,5 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import PropTypes, { shape } from 'prop-types';
 import { createUser } from '../services/userAPI';
 import Carregando from './Carregando';
 
@@ -8,12 +8,6 @@ class Login extends React.Component {
     loginName: '',
     buttonDisabled: true,
   };
-
-  // componentDidMount() {
-  //   this.setState({
-  //     loading: false,
-  //   });
-  // }
 
   handleNameChange = (event) => {
     const { value } = event.target;
@@ -30,19 +24,19 @@ class Login extends React.Component {
     this.setState({ buttonDisabled: nameMin });
   };
 
-  /* Ao clicar no botão Entrar, utilize a função createUser da userAPI para salvar o nome digitado -> LOCAL STORAGE. */
+  /* utilize a função createUser da userAPI para salvar o nome digitado -> LOCAL STORAGE. */
   /* Ao clicar no botão Enviar , a mensagem Carregando... é exibida e após a resposta da API acontece o redirecionamento para a rota /search. */
-  handleClick = async () => {
+  handleClick = async () => { // createUser é assíncrona.
     const { loginName } = this.state;
-    const { history } = this.props; // props nativa.
+    const { history } = this.props; // props nativa do Route.
     this.setState({
       loading: true,
     });
-    await createUser({ name: loginName }); // não precisa do tample literals pq não ta concatenando.
-    history.push('/search');
-    // this.setState({
-    //   loading: false,
-    // }); // desnecessário neste caso, pq não vai dar falha.
+    await createUser({ name: loginName }); // não precisa do tample literals, pq não ta concatenando.
+    history.push('/search'); // Funciona como o redirect, mas usado dentro de uma função;
+    /* this.setState({
+      loading: false,
+    }); */ // desnecessário neste caso, já que qndo for false, vai redirecionar.
   };
 
   render() {
@@ -71,13 +65,17 @@ class Login extends React.Component {
           Entrar
         </button>
         { loading && <Carregando /> }
+        {' '}
+        {/* Rendereização só em caso de true, já que quando terminar(false) vai redirecionar */}
       </div>
     );
   }
 }
 
 Login.propTypes = {
-  name: PropTypes.string, // ??
+  history: objectOf(shape({
+    push: PropTypes.func,
+  })), // history é o um objeto com diferentes tipos -> shape. Push é um método/função de history.
 }.isRequerid;
 
 export default Login;
