@@ -1,5 +1,5 @@
 import React from 'react';
-import PropTypes, { shape } from 'prop-types';
+import PropTypes from 'prop-types';
 import { createUser } from '../services/userAPI';
 import Carregando from './Carregando';
 
@@ -65,7 +65,6 @@ class Login extends React.Component {
           Entrar
         </button>
         { loading && <Carregando /> }
-        {' '}
         {/* Rendereização só em caso de true, já que quando terminar(false) vai redirecionar */}
       </div>
     );
@@ -73,9 +72,9 @@ class Login extends React.Component {
 }
 
 Login.propTypes = {
-  history: objectOf(shape({
+  history: PropTypes.shape({
     push: PropTypes.func,
-  })), // history é o um objeto com diferentes tipos -> shape. Push é um método/função de history.
+  }), // history é o um objeto com diferentes tipos -> shape. Push é um método/função de history.
 }.isRequerid;
 
 export default Login;

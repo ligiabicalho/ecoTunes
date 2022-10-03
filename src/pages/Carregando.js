@@ -3,9 +3,9 @@ import React from 'react';
 class Carregando extends React.Component {
   render() {
     return (
-      <h1>
+      <h3>
         Carregando...
-      </h1>
+      </h3>
     );
   }
 }
