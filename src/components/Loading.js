@@ -1,6 +1,6 @@
 import React from 'react';
 
-class Carregando extends React.Component {
+class Loading extends React.Component {
   render() {
     return (
       <h3>
@@ -10,4 +10,4 @@ class Carregando extends React.Component {
   }
 }
 
-export default Carregando;
+export default Loading;

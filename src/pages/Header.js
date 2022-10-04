@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { getUser } from '../services/userAPI';
-import Carregando from './Carregando';
+import Loading from '../components/Loading';
 
 class Header extends React.Component {
   state = {
@@ -14,7 +14,7 @@ class Header extends React.Component {
 
   getUserSaved = async () => {
     this.setState({ loading: true });
-    const user = await getUser();
+    const user = await getUser(); // função importada
     this.setState({
       loading: false,
       loginName: user.name,
@@ -32,7 +32,7 @@ class Header extends React.Component {
           <Link to="/profile" data-testid="link-to-profile">Perfil </Link>
         </nav>
         {loading
-          ? <Carregando />
+          ? <Loading />
           : <p data-testid="header-user-name">{ `Usuário: ${loginName}` }</p>}
       </header>
     );

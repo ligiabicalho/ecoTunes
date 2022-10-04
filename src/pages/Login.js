@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { createUser } from '../services/userAPI';
-import Carregando from './Carregando';
+import Loading from '../components/Loading';
 
 class Login extends React.Component {
   state = {
@@ -64,7 +64,7 @@ class Login extends React.Component {
         >
           Entrar
         </button>
-        { loading && <Carregando /> }
+        { loading && <Loading /> }
         {/* Rendereização só em caso de true, já que quando terminar(false) vai redirecionar */}
       </div>
     );
