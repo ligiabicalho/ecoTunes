@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
-class Card extends React.Component {
+class AlbumCard extends React.Component {
   render() {
     const { resultados } = this.props;
     return (
@@ -30,8 +30,8 @@ class Card extends React.Component {
   }
 }
 
-Card.propTypes = {
+AlbumCard.propTypes = {
   resultados: PropTypes.arrayOf,
 }.isRequired;
 
-export default Card;
+export default AlbumCard;

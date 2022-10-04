@@ -1,8 +1,8 @@
 import React from 'react';
-import Header from './Header';
+import Header from '../components/Header';
 import searchAlbumsAPI from '../services/searchAlbumsAPI';
 import Loading from '../components/Loading';
-import Card from '../components/Card';
+import AlbumCard from '../components/AlbumCard';
 
 class Search extends React.Component {
   state = {
@@ -50,7 +50,8 @@ class Search extends React.Component {
   };
 
   render() {
-    const { searchInput, btnSrcDisabled, loading, resultados, artist, researched } = this.state;
+    const { searchInput, btnSrcDisabled, loading,
+      resultados, artist, researched } = this.state;
     return (
       <div data-testid="page-search">
         <Header />
@@ -88,7 +89,7 @@ class Search extends React.Component {
                     {artist}
                   </h3>
                   {(resultados.length > 0)
-                    ? <Card resultados={ resultados } />
+                    ? <AlbumCard resultados={ resultados } />
                     : <p>Nenhum álbum foi encontrado</p>}
                 </div>
               )}
