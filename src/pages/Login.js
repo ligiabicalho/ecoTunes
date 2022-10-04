@@ -20,7 +20,7 @@ class Login extends React.Component {
   handleButtonValidation = () => {
     const { loginName } = this.state;
     const three = 3;
-    const nameMin = loginName.length < three; // Qndo >3, false;
+    const nameMin = loginName.length < three; // Qndo >= 3, false;
     this.setState({ buttonDisabled: nameMin });
   };
 
