@@ -7,44 +7,50 @@ import Card from '../components/Card';
 class Search extends React.Component {
   state = {
     searchInput: '',
+    artist: '',
     btnSrcDisabled: true,
+    resultados: [],
+    researched: false,
   };
-
-  componentDidMount() {
-  }
 
   handleSearchButton = async () => {
     const { searchInput } = this.state;
     this.setState({
       loading: true,
-      // searchInput: '', // Se eu limpar assim, o parâmetro vai vazio...
+      artist: searchInput,
     });
+    // Como é função de outro arquivo, não usar o "this." e fazer o import!
     // Parâmetro: valor do input a ser pesquisado;
-    const result = await searchAlbumsAPI(searchInput); // Como é função de outro arquivo, não usar o "this." e fazer o import!
-    // console.log(result);
-    this.setState({
-      loading: false,
-      resultados: result,
-      searchInput: '',
-    });
+    const results = await searchAlbumsAPI(searchInput);
+
+    this.setState(
+      {
+        loading: false,
+        resultados: results,
+        searchInput: '',
+        researched: true,
+      },
+      () => this.handleButtonValidation(),
+    );
   };
 
   handleInputChange = (e) => {
     const { value } = e.target;
     this.setState(
       { searchInput: value },
-      () => this.handleButtonValidation(), // PQ É DIFERENTE SÓ CHAMAR A FUNÇÃO OU COLOCAR UMA ARROW FUNCTION?
+      () => this.handleButtonValidation(),
+      // PQ É DIFERENTE SÓ CHAMAR A FUNÇÃO OU COLOCAR UMA ARROW FUNCTION?
     );
   };
 
   handleButtonValidation = () => {
     const { searchInput } = this.state;
-    const inputMin = searchInput.length < 2;
+    const inputMin = searchInput.length < 2; // false
     this.setState({ btnSrcDisabled: inputMin });
   };
 
   render() {
-    const { searchInput, btnSrcDisabled, loading, resultados } = this.state;
+    const { searchInput, btnSrcDisabled, loading, resultados, artist, researched } = this.state;
     return (
       <div data-testid="page-search">
         <Header />
@@ -72,12 +78,21 @@ class Search extends React.Component {
                   Pesquisar
                 </button>
               </form>
-              {/* Requisito 6 item 1, subitem 3. */}
-              { resultados !== undefined
-                && <Card resultados={ resultados } />}
 
-            </>
-          )}
+              {researched && (
+                <div className="result">
+                  <h3>
+                    {' '}
+                    Resultado de álbuns de:
+                    {' '}
+                    {artist}
+                  </h3>
+                  {(resultados.length > 0)
+                    ? <Card resultados={ resultados } />
+                    : <p>Nenhum álbum foi encontrado</p>}
+                </div>
+              )}
+            </>)}
       </div>
     );
   }

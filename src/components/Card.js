@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 class Card extends React.Component {
@@ -6,23 +7,24 @@ class Card extends React.Component {
     const { resultados } = this.props;
     return (
       <div className="card-search-result">
-        <h3>
-          Resultado de álbuns de:
-          {resultados[0].artistName}
-        </h3>
-        <div>
+        <ul>
           {resultados.map((item) => (
-            <div key={ item.collectionId }>
+            <li key={ item.collectionId }>
               Artista:
               {item.artistName}
               <br />
-              Album:
-              {item.collectionName}
-              <br />
-              <img src={ item.artworkUrl100 } alt={ item.artistName } />
-            </div>
+              <Link
+                to={ `/album/${item.collectionId}` }
+                data-testid={ `link-to-album-${item.collectionId}` }
+              >
+                Album:
+                {item.collectionName}
+                <br />
+                <img src={ item.artworkUrl100 } alt={ item.artistName } />
+              </Link>
+            </li>
           ))}
-        </div>
+        </ul>
       </div>
     );
   }
