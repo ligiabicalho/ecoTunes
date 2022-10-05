@@ -12,16 +12,16 @@ class MusicCard extends React.Component {
   };
 
   componentDidMount() {
-    this.handleGetFavoriteSongs();
+    this.handleGetFavoriteSongs(); // Quais situações essa função é executada???
   }
 
   handleGetFavoriteSongs = async () => {
     this.setState({ loading: true });
-    const favorites = await getFavoriteSongs();
-    this.setState(() => ({
+    const favorites = await getFavoriteSongs(); // resgata as músicas salvas e atualiza no state.
+    this.setState({
       listFavorites: favorites,
       loading: false,
-    }), () => this.handleHasFavorite());
+    }, () => this.handleHasFavorite());
   };
 
   handleHasFavorite = () => {
@@ -29,15 +29,18 @@ class MusicCard extends React.Component {
     const { listFavorites } = this.state;
     return listFavorites.some(
       (favorita) => favorita.trackId === music.trackId,
-    );
+    ); // retorna true se a música estiver salva nos favoritos -> altera o checked;
   };
 
   handleAddFavorite = async ({ target }) => {
     const { music } = this.props;
-    this.setState({ loading: true,
-      [target.name]: target.checked });
+    this.setState(
+      { loading: true,
+        [target.name]: target.checked }, // ainda não sei se vou usar isso aqui
+    );
     await addSong(music);
     this.setState({ loading: false });
+    this.handleGetFavoriteSongs(); // É o melhor lugar pra chamar essa função?...
   };
 
   render() {
