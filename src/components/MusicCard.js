@@ -4,42 +4,45 @@ import { addSong, getFavoriteSongs } from '../services/favoriteSongsAPI';
 import Loading from './Loading';
 
 class MusicCard extends React.Component {
+/* Limpar LocalStorage no console: localStorage.setItem('favorite_songs', JSON.stringify([])); */
   state = {
     loading: false,
-    checked: false,
+    listFavorites: [],
+    // favorite: '',
   };
 
-  componentDidMount() { // Requisição
+  componentDidMount() {
     this.handleGetFavoriteSongs();
   }
 
   handleGetFavoriteSongs = async () => {
-    const { music } = this.props;
     this.setState({ loading: true });
-    const favoritas = await getFavoriteSongs();
-    // ao receber as favoritas, verifica se alguma corresponde a musica do card, se TRUE altera o checked.
-    favoritas.some(
-      (favorita) => (favorita.trackId === music.trackId
-        && this.setState({ checked: true })),
-    );
-    this.setState({
+    const favorites = await getFavoriteSongs();
+    this.setState(() => ({
+      listFavorites: favorites,
       loading: false,
-      savedFavoritas: favoritas,
-    });
+    }), () => this.handleHasFavorite());
   };
 
-  handleCheckFavorite = async ({ target }) => {
+  handleHasFavorite = () => {
     const { music } = this.props;
-    this.setState({ loading: true });
+    const { listFavorites } = this.state;
+    return listFavorites.some(
+      (favorita) => favorita.trackId === music.trackId,
+    );
+  };
+
+  handleAddFavorite = async ({ target }) => {
+    const { music } = this.props;
+    this.setState({ loading: true,
+      [target.name]: target.checked });
     await addSong(music);
-    this.setState({
-      loading: false,
-      checked: target.checked });
+    this.setState({ loading: false });
   };
 
   render() {
     const { music } = this.props;
-    const { loading, checked } = this.state;
+    const { loading } = this.state;
     return (
       <>
         {loading && <Loading />}
@@ -57,9 +60,11 @@ class MusicCard extends React.Component {
         >
           <input
             type="checkbox"
+            name="favorite"
             id={ music.trackId }
-            checked={ checked }
-            onChange={ this.handleCheckFavorite }
+            // value -> por padrão retorna on/unchecked, ou caso receba um valor, retorna valor/unchecked;
+            checked={ this.handleHasFavorite() } // Este atributo qndo presente marca por padrão o checkbox(true), não demanda um valor. Pode passar uma função com retorno true/false pra dentro do checked(?);
+            onChange={ this.handleAddFavorite }
           />
           Favorita
         </label>
