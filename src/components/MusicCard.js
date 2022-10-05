@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { addSong, getFavoriteSongs } from '../services/favoriteSongsAPI';
+import { addSong, getFavoriteSongs, removeSong } from '../services/favoriteSongsAPI';
 import Loading from './Loading';
 
 class MusicCard extends React.Component {
@@ -32,15 +32,19 @@ class MusicCard extends React.Component {
     ); // retorna true se a música estiver salva nos favoritos -> altera o checked;
   };
 
-  handleAddFavorite = async ({ target }) => {
+  handleCheckboxFavorite = async ({ target }) => {
     const { music } = this.props;
     this.setState(
       { loading: true,
         [target.name]: target.checked }, // ainda não sei se vou usar isso aqui
     );
-    await addSong(music);
+    if (this.handleHasFavorite()) {
+      await removeSong(music);
+    } else {
+      await addSong(music); // se FALSE, addSong
+    }
     this.setState({ loading: false });
-    this.handleGetFavoriteSongs(); // É o melhor lugar pra chamar essa função?...
+    this.handleGetFavoriteSongs();
   };
 
   render() {
@@ -66,8 +70,8 @@ class MusicCard extends React.Component {
             name="favorite"
             id={ music.trackId }
             // value -> por padrão retorna on/unchecked, ou caso receba um valor, retorna valor/unchecked;
-            checked={ this.handleHasFavorite() } // Este atributo qndo presente marca por padrão o checkbox(true), não demanda um valor. Pode passar uma função com retorno true/false pra dentro do checked(?);
-            onChange={ this.handleAddFavorite }
+            checked={ this.handleHasFavorite() } // Este atributo qndo presente marca por padrão o checkbox(true), não demanda um valor. Pode passar uma função com retorno true/false pra dentro do checked; -> QUANDO ESSA FUNÇÃO É CHAMADA?
+            onChange={ this.handleCheckboxFavorite }
           />
           Favorita
         </label>
