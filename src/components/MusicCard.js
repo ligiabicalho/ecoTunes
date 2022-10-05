@@ -33,7 +33,7 @@ class MusicCard extends React.Component {
   };
 
   handleCheckboxFavorite = async ({ target }) => {
-    const { music } = this.props;
+    const { music, upFavorite } = this.props;
     this.setState(
       { loading: true,
         [target.name]: target.checked }, // ainda não sei se vou usar isso aqui
@@ -45,6 +45,7 @@ class MusicCard extends React.Component {
     }
     this.setState({ loading: false });
     this.handleGetFavoriteSongs();
+    upFavorite();
   };
 
   render() {
@@ -81,7 +82,7 @@ class MusicCard extends React.Component {
 }
 
 MusicCard.propTypes = {
-  musics: PropTypes.object,
+  music: PropTypes.object,
 }.isRequired;
 
 export default MusicCard;

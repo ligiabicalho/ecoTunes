@@ -19,7 +19,7 @@ class Search extends React.Component {
       loading: true,
       artist: searchInput,
     });
-    // Como é função de outro arquivo, não usar o "this." e fazer o import!
+    // Como é função de outro arquivo, não usar o "this.", mas fazer o import!
     // Parâmetro: valor do input a ser pesquisado;
     const results = await searchAlbumsAPI(searchInput);
 
