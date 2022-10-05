@@ -1,60 +1,68 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { addSong } from '../services/favoriteSongsAPI';
+import { addSong, getFavoriteSongs } from '../services/favoriteSongsAPI';
 import Loading from './Loading';
 
 class MusicCard extends React.Component {
   state = {
     loading: false,
+    checked: false,
   };
 
-  handleCheckFavorite = async ({ target: { id } }) => {
-    const { musics } = this.props;
+  componentDidMount() { // Requisição
+    this.handleGetFavoriteSongs();
+  }
+
+  handleGetFavoriteSongs = async () => {
+    const { music } = this.props;
     this.setState({ loading: true });
-    await addSong(musics[id]);
-    this.setState({ loading: false });
+    const favoritas = await getFavoriteSongs();
+    // ao receber as favoritas, verifica se alguma corresponde a musica do card, se TRUE altera o checked.
+    favoritas.some(
+      (favorita) => (favorita.trackId === music.trackId
+        && this.setState({ checked: true })),
+    );
+    this.setState({
+      loading: false,
+      savedFavoritas: favoritas,
+    });
+  };
+
+  handleCheckFavorite = async ({ target }) => {
+    const { music } = this.props;
+    this.setState({ loading: true });
+    await addSong(music);
+    this.setState({
+      loading: false,
+      checked: target.checked });
   };
 
   render() {
-    const { musics } = this.props;
-    const { loading } = this.state;
+    const { music } = this.props;
+    const { loading, checked } = this.state;
     return (
       <>
-        <ul>
-          { musics.map((music, i) => (
-            i === 0 // 1º Obj não é uma música, então exibe o título.
-              ? (
-                <div key={ i }>
-                  <h1 data-testid="album-name">{music.collectionName}</h1>
-                  <h2 data-testid="artist-name">{music.artistName}</h2>
-                </div>
-              )
-              : (
-                <li key={ i }>
-                  <p>{music.trackName}</p>
-                  <audio data-testid="audio-component" src={ music.previewUrl } controls>
-                    <track kind="captions" />
-                    O seu navegador não suporta o elemento
-                    <code>audio</code>
-                    .
-                  </audio>
-                  <label
-                    htmlFor={ i }
-                    data-testid={ `checkbox-music-${music.trackId}` }
-                  >
-                    <input
-                      type="checkbox"
-                      id={ i }
-                      name="favorite"
-                      onChange={ this.handleCheckFavorite }
-                    />
-                    Favorita
-                  </label>
-                </li>
-              )
-          ))}
-        </ul>
         {loading && <Loading />}
+        {/* Organização do código e pages Album e Music Card para o Requisito 9 */}
+        <p>{music.trackName}</p>
+        <audio data-testid="audio-component" src={ music.previewUrl } controls>
+          <track kind="captions" />
+          O seu navegador não suporta o elemento
+          <code>audio</code>
+          .
+        </audio>
+        <label
+          htmlFor={ music.trackId }
+          data-testid={ `checkbox-music-${music.trackId}` }
+        >
+          <input
+            type="checkbox"
+            id={ music.trackId }
+            checked={ checked }
+            onChange={ this.handleCheckFavorite }
+          />
+          Favorita
+        </label>
       </>
     );
   }

@@ -29,7 +29,22 @@ class Album extends React.Component {
             ? <Loading />
             : (
               <div data-testid="page-album">
-                <MusicCard musics={ musics } />
+                <ul>
+                  {musics.map((music, i) => (
+                    i === 0 // 1º Obj não é uma música, então exibe o título.
+                      ? (
+                        <div key={ i }>
+                          <h1 data-testid="album-name">{music.collectionName}</h1>
+                          <h2 data-testid="artist-name">{music.artistName}</h2>
+                        </div>
+                      )
+                      : (
+                        <li key={ i }>
+                          <MusicCard music={ music } />
+                        </li>
+                      )
+                  ))}
+                </ul>
               </div>
             )
         }
