@@ -9,7 +9,7 @@ class Search extends React.Component {
     searchInput: '',
     artist: '',
     btnSrcDisabled: true,
-    resultados: [],
+    searchedAlbums: [],
     researched: false,
   };
 
@@ -21,12 +21,12 @@ class Search extends React.Component {
     });
     // Como é função de outro arquivo, não usar o "this.", mas fazer o import!
     // Parâmetro: valor do input a ser pesquisado;
-    const results = await searchAlbumsAPI(searchInput);
+    const searchedAlbums = await searchAlbumsAPI(searchInput);
 
     this.setState(
       {
         loading: false,
-        resultados: results,
+        searchedAlbums,
         searchInput: '',
         researched: true,
       },
@@ -51,7 +51,7 @@ class Search extends React.Component {
 
   render() {
     const { searchInput, btnSrcDisabled, loading,
-      resultados, artist, researched } = this.state;
+      searchedAlbums, artist, researched } = this.state;
     return (
       <div data-testid="page-search">
         <Header />
@@ -60,6 +60,7 @@ class Search extends React.Component {
           : (
             <>
               <form>
+                <h3>Pesquise pelo nome da banda ou artista:</h3>
                 <label htmlFor="search-input">
                   <input
                     data-testid="search-artist-input"
@@ -83,13 +84,22 @@ class Search extends React.Component {
               {researched && (
                 <div className="result">
                   <h3>
-                    {' '}
-                    Resultado de álbuns de:
-                    {' '}
-                    {artist}
+                    {`Resultado de álbuns de: ${artist}`}
                   </h3>
-                  {(resultados.length > 0)
-                    ? <AlbumCard resultados={ resultados } />
+                  {searchedAlbums.length > 0
+                    ? (
+                      <ul>
+                        {searchedAlbums.map((album) => (
+                          <li key={ album.collectionId }>
+                            <AlbumCard
+                              artistName={ album.artistName }
+                              collectionName={ album.collectionName }
+                              collectionId={ album.collectionId }
+                              artworkUrl100={ album.artworkUrl100 }
+                            />
+                          </li>))}
+                      </ul>
+                    )
                     : <p>Nenhum álbum foi encontrado</p>}
                 </div>
               )}

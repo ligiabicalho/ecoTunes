@@ -4,34 +4,31 @@ import PropTypes from 'prop-types';
 
 class AlbumCard extends React.Component {
   render() {
-    const { resultados } = this.props;
+    const { artistName, collectionName, collectionId, artworkUrl100 } = this.props;
     return (
       <div className="card-search-result">
-        <ul>
-          {resultados.map((item) => (
-            <li key={ item.collectionId }>
-              Artista:
-              {item.artistName}
-              <br />
-              <Link
-                to={ `/album/${item.collectionId}` }
-                data-testid={ `link-to-album-${item.collectionId}` }
-              >
-                Album:
-                {item.collectionName}
-                <br />
-                <img src={ item.artworkUrl100 } alt={ item.artistName } />
-              </Link>
-            </li>
-          ))}
-        </ul>
+        <p>
+          {`Artista: ${artistName}`}
+        </p>
+        <Link
+          to={ `/album/${collectionId}` }
+          data-testid={ `link-to-album-${collectionId}` }
+        >
+          <p>
+            {`Album: ${collectionName}`}
+          </p>
+          <img src={ artworkUrl100 } alt={ artistName } />
+        </Link>
       </div>
     );
   }
 }
 
 AlbumCard.propTypes = {
-  resultados: PropTypes.arrayOf,
+  artistName: PropTypes.string,
+  collectionName: PropTypes.string,
+  collectionId: PropTypes.number,
+  artworkUrl100: PropTypes.string,
 }.isRequired;
 
 export default AlbumCard;

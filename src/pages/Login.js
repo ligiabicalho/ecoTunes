@@ -24,14 +24,10 @@ class Login extends React.Component {
     this.setState({ buttonDisabled: nameMin });
   };
 
-  /* utilize a função createUser da userAPI para salvar o nome digitado -> LOCAL STORAGE. */
-  /* Ao clicar no botão Enviar , a mensagem Carregando... é exibida e após a resposta da API acontece o redirecionamento para a rota /search. */
   handleClick = async () => { // createUser é assíncrona.
     const { loginName } = this.state;
     const { history } = this.props; // props nativa do Route.
-    this.setState({
-      loading: true,
-    });
+    this.setState({ loading: true });
     await createUser({ name: loginName }); // não precisa do tample literals, pq não ta concatenando.
     history.push('/search'); // Funciona como o redirect, mas usado dentro de uma função;
     /* this.setState({

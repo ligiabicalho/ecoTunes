@@ -3,7 +3,7 @@ import React from 'react';
 import Header from '../components/Header';
 import MusicCard from '../components/MusicCard';
 import Loading from '../components/Loading';
-import { getFavoriteSongs } from '../services/favoriteSongsAPI';
+import { getFavoriteSongs, removeSong } from '../services/favoriteSongsAPI';
 
 class Favorites extends React.Component {
   state = {
@@ -15,13 +15,23 @@ class Favorites extends React.Component {
     await this.getFavorites();
   }
 
+  componentDidUpdate() {
+    // this.getFavorites();
+  }
+
   getFavorites = async () => {
     this.setState({ loading: true });
     const favorites = await getFavoriteSongs();
     this.setState({
       listFavorites: favorites,
       loading: false,
-    } /* () => this.handleHasFavorite() */);
+    });
+  };
+
+  handleChange = async ({ target: { music } }) => {
+    this.setState({ loading: true });
+    await removeSong(music);
+    this.getFavorites();
   };
 
   render() {
@@ -37,7 +47,14 @@ class Favorites extends React.Component {
                 {listFavorites.length > 0
                   ? listFavorites.map((favorite, i) => (
                     <li key={ i }>
-                      <MusicCard music={ favorite } upFavorite={ this.getFavorites } />
+                      <MusicCard
+                        trackId={ favorite.trackId }
+                        trackName={ favorite.trackName }
+                        previewUrl={ favorite.previewUrl }
+                        handleChange={ this.handleChange }
+                        checked={ listFavorites.length > 0
+                          && listFavorites.some((favorita) => favorita.trackId) }
+                      />
                     </li>
                   ))
                   : <p>Não há músicas favoritas salvas.</p>}
