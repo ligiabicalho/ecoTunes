@@ -36,21 +36,22 @@ class Album extends React.Component {
     });
   };
 
-  handleFavoriteCheck = (trackId) => { // favoriteCheck(t.trackId)
+  favoriteCheck = (trackId) => {
     const { listFavorites } = this.state;
     return listFavorites.some((fave) => fave.trackId === trackId);
   };
 
   handleChange = async ({ target }) => {
-    const { allMusics } = this.state;
-    const { trackId, checked } = target;
-    const songCheck = allMusics.find((music) => music.trackId === trackId);
     this.setState({ loading: true });
-    if (checked) {
-      await addSong(songCheck);
-    } else {
-      await removeSong(songCheck);
-    }
+    // console.log(target.checked); -> está retornando true, mesmo a caixinha não estando checkada.
+    const { allMusics } = this.state;
+    const { id } = target;
+    const songCheck = allMusics.find((music) => music.trackId === id);
+    // if (checked) {
+    await addSong(songCheck);
+    // } else {
+    //   await removeSong(songCheck);
+    // }
     this.handleGetFavoriteSongs();
   };
 
@@ -79,8 +80,8 @@ class Album extends React.Component {
                             trackId={ music.trackId }
                             trackName={ music.trackName }
                             previewUrl={ music.previewUrl }
-                            handleChange={ () => this.handleChange }
-                            favoriteCheck={ this.handleFavoriteCheck(music.trackId) }
+                            handleChange={ this.handleChange }
+                            favoriteCheck={ this.favoriteCheck(music.trackId) }
                           />
                         </li>
                       )

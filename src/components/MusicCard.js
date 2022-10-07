@@ -2,19 +2,19 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 class MusicCard extends React.Component {
-  state = {
-    isFavorite: false,
-  };
+  // state = {
+  //   isFavorite: false,
+  // };
 
-  componentDidMount() {
-    const { favoriteCheck } = this.props;
-    if (favoriteCheck) {
-      this.setState({ isFavorite: true });
-    }
-  }
+  // componentDidMount() {
+  //   const { favoriteCheck } = this.props;
+  //   if (favoriteCheck) {
+  //     this.setState({ isFavorite: true });
+  //   }
+  // }
 
   render() {
-    const { isFavorite } = this.state;
+    // const { isFavorite } = this.state;
     const { trackName, trackId, previewUrl, handleChange } = this.props;
     return (
       <>
@@ -32,7 +32,7 @@ class MusicCard extends React.Component {
           <input
             type="checkbox"
             id={ trackId }
-            checked={ isFavorite }
+            // checked={ favoriteCheck }
             onChange={ handleChange }
           />
           Favorita
