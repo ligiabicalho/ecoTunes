@@ -28,7 +28,7 @@ class Login extends React.Component {
     const { loginName } = this.state;
     const { history } = this.props; // props nativa do Route.
     this.setState({ loading: true });
-    await createUser({ name: loginName }); // não precisa do tample literals, pq não ta concatenando.
+    await createUser({ name: loginName }); // não precisa do tample literals no valor, pq não ta concatenando.
     history.push('/search'); // Funciona como o redirect, mas usado dentro de uma função;
     /* this.setState({
       loading: false,
