@@ -15,23 +15,28 @@ class Favorites extends React.Component {
     await this.getFavorites();
   }
 
-  componentDidUpdate() {
-    // this.getFavorites();
-  }
-
   getFavorites = async () => {
     this.setState({ loading: true });
-    const favorites = await getFavoriteSongs();
+    const listFavorites = await getFavoriteSongs();
     this.setState({
-      listFavorites: favorites,
+      listFavorites,
       loading: false,
-    });
+    }); // , () => this.favoriteCheck()
   };
 
-  handleChange = async ({ target: { music } }) => {
+  handleChange = async ({ target: { id } }) => {
+    const { listFavorites } = this.state;
     this.setState({ loading: true });
-    await removeSong(music);
+    const songCheck = listFavorites.find((fave) => fave.trackId === Number(id));
+    await removeSong(songCheck);
     this.getFavorites();
+  };
+
+  favoriteCheck = (trackId) => {
+    const { listFavorites } = this.state;
+    if (listFavorites.length > 0) {
+      return listFavorites.some((fave) => fave.trackId === trackId);
+    } return false;
   };
 
   render() {
@@ -52,8 +57,7 @@ class Favorites extends React.Component {
                         trackName={ favorite.trackName }
                         previewUrl={ favorite.previewUrl }
                         handleChange={ this.handleChange }
-                        checked={ listFavorites.length > 0
-                          && listFavorites.some((favorita) => favorita.trackId) }
+                        favoriteCheck={ this.favoriteCheck(favorite.trackId) }
                       />
                     </li>
                   ))
