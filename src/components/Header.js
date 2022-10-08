@@ -26,6 +26,7 @@ class Header extends React.Component {
 
     return (
       <header data-testid="header-component">
+        <h1>TrybeTunes</h1>
         <nav>
           <Link to="/search" data-testid="link-to-search">Pesquisa </Link>
           <Link to="/favorites" data-testid="link-to-favorites">Favoritas </Link>
