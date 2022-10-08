@@ -7,7 +7,7 @@ import { getUser } from '../services/userAPI';
 class Profile extends React.Component {
   state = {
     user: [],
-    loading: false,
+    loading: true,
   };
 
   componentDidMount() {
@@ -15,7 +15,6 @@ class Profile extends React.Component {
   }
 
   getUserSaved = async () => {
-    this.setState({ loading: true });
     const user = await getUser();
     this.setState({
       loading: false,
@@ -25,6 +24,7 @@ class Profile extends React.Component {
 
   render() {
     const { loading, user } = this.state;
+    console.log(user.name);
     return (
       <div data-testid="page-profile">
         <Header />
@@ -32,7 +32,8 @@ class Profile extends React.Component {
           ? <Loading />
           : (
             <>
-              {user.email}
+              <p>{user.name}</p>
+              <p>{user.email}</p>
               <img src={ user.image } alt={ user.name } data-testid="profile-image" />
               {user.description}
               <Link to="/profile/edit">Editar perfil</Link>

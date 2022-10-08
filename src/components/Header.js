@@ -34,7 +34,7 @@ class Header extends React.Component {
         </nav>
         {loading
           ? <Loading />
-          : <p data-testid="header-user-name">{ `Usuário: ${loginName}` }</p>}
+          : <p data-testid="header-user-name">{loginName}</p>}
       </header>
     );
   }
