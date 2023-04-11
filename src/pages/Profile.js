@@ -23,8 +23,7 @@ class Profile extends React.Component {
   };
 
   render() {
-    const { loading, user } = this.state;
-    console.log(user.name);
+    const { loading, user: { name, description, image, email } } = this.state;
     return (
       <div data-testid="page-profile">
         <Header />
@@ -32,11 +31,28 @@ class Profile extends React.Component {
           ? <Loading />
           : (
             <>
-              <p>{user.name}</p>
-              <p>{user.email}</p>
-              <img src={ user.image } alt={ user.name } data-testid="profile-image" />
-              {user.description}
-              <Link to="/profile/edit">Editar perfil</Link>
+              <Link to="/profile/edit">
+                <button type="button">Editar perfil</button>
+              </Link>
+              <div id="profile-image">
+                {image
+                  ? (
+                    <img
+                      src={ image }
+                      alt={ name }
+                      data-testid="profile-image"
+                    />
+                  )
+                  : <p data-testid="profile-image">Adicione uma foto</p>}
+              </div>
+              <h3>Nome de usuário:</h3>
+              <p>{name}</p>
+              <h3>E-mail:</h3>
+              {email ? <p>{email}</p> : <p>Adicione um e-mail de contato</p>}
+              <h3>Descrição:</h3>
+              {description
+                ? <p>{description}</p>
+                : <p>Adicione uma descrição</p>}
             </>)}
       </div>
     );

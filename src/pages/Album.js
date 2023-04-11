@@ -96,7 +96,9 @@ class Album extends React.Component {
 
 Album.propTypes = {
   match: PropTypes.shape({
-    params: PropTypes.objectOf,
+    params: PropTypes.shape({
+      id: PropTypes.string,
+    }),
   }),
 }.isRequired;
 
